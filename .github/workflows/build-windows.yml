@@ -3,7 +3,13 @@
 #
 # 作用：无需在本机安装 Qt，把本仓库推到 GitHub 后，在 Actions 页面点
 #       "Run workflow" 即可自动编译并产出 serialplot-zh_CN-portable（含 exe +
-#       Qt 运行库 + 中文翻译），从 Artifacts 下载即为解压即用的绿色版。
+#       Qt 运行库 + 中文翻译），解压即用。
+#
+# 下载方式（二选一，均自动完成）：
+#   * GitHub Release：构建后自动发布，从仓库 "Releases" 页面下载 zip。
+#   * Gitee 下载站（可选）：若在 GitHub 仓库 Settings -> Secrets 中配置了
+#     GITEE_TOKEN 与 GITEE_REPO，本工作流会把同一个 zip 同步上传到你的
+#     Gitee 仓库 Release，国内下载更快。未配置则自动跳过，不影响构建。
 #
 # 关键约束（已在本工作流内处理）：
 #   * 项目把 Qwt 静态库名写死为 libqwt.a —— 必须用 MinGW，不能用 MSVC。
@@ -15,7 +21,7 @@
 # 使用步骤：
 #   1. 把本仓库推到你自己的 GitHub 仓库（main 或 master 分支）
 #   2. 进入仓库的 Actions -> "Build Windows (中文汉化版)" -> Run workflow
-#   3. 运行结束后，在 "Artifacts" 处下载 serialplot-zh_CN-portable
+#   3. 运行结束后：GitHub 上从 "Releases" 下载；若已配置 Gitee，也去 Gitee 下载
 # =============================================================================
 name: Build Windows (中文汉化版)
 
@@ -23,6 +29,10 @@ on:
   workflow_dispatch:
   push:
     branches: [ main, master ]
+
+# 发布 GitHub Release 需要写权限
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -78,7 +88,7 @@ jobs:
           cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_QWT=ON
           cmake --build build --config Release -j"$(nproc 2>/dev/null || echo 4)"
 
-      - name: 部署并打包 (windeployqt + 翻译)
+      - name: 部署并打包 (windeployqt + 翻译 + 压缩 zip)
         shell: bash
         run: |
           set -e
@@ -89,9 +99,64 @@ jobs:
           cp translations/qtbase_zh_CN.qm dist/translations/
           cp build/serialplot.exe dist/
           echo "打包内容：" && ls -R dist | head -40
+          # 生成可分发的 zip（供 Release / Gitee 上传）
+          python -c "import shutil; shutil.make_archive('serialplot-zh_CN-portable', 'zip', 'dist')"
+          ls -l serialplot-zh_CN-portable.zip
 
-      - name: 上传产物
+      - name: 上传产物 (Artifacts 兜底)
         uses: actions/upload-artifact@v4
         with:
           name: serialplot-zh_CN-portable
-          path: dist
+          path: serialplot-zh_CN-portable.zip
+
+      - name: 发布到 GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: zh-build-${{ github.run_number }}
+          name: SerialPlot 中文汉化版 v0.13.0 (build ${{ github.run_number }})
+          body: |
+            由 GitHub Actions 自动构建的 SerialPlot 中文汉化版。
+
+            - 含 serialplot.exe + Qt 运行库 + 中文翻译（serialplot_zh_CN.qm / qtbase_zh_CN.qm）
+            - 解压后直接运行 serialplot.exe，无需安装 Qt
+            - 语言：系统区域为中文时自动中文；菜单“语言(Language)”可切中/英；命令行 --lang zh_CN / --lang en
+            - 切换语言需重启程序（Qt 翻译器机制限制）
+          files: serialplot-zh_CN-portable.zip
+          prerelease: false
+
+  sync-to-gitee:
+    # 仅当配置了 Gitee 令牌与仓库时才运行；否则自动跳过，不影响主构建
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ secrets.GITEE_TOKEN != '' && secrets.GITEE_REPO != '' }}
+    steps:
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: serialplot-zh_CN-portable
+          path: ./pkg
+
+      - name: 上传到 Gitee Release
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_REPO: ${{ secrets.GITEE_REPO }}
+          TAG: zh-build-${{ github.run_number }}
+        run: |
+          set -e
+          ZIP="./pkg/serialplot-zh_CN-portable.zip"
+          test -f "$ZIP" || { echo "未找到 zip 产物"; exit 1; }
+          echo "创建/获取 Gitee Release: $TAG"
+          # 创建 release（Gitee API v5，私人令牌通过 access_token 参数鉴权）
+          RESP=$(curl -s -X POST \
+            "https://gitee.com/api/v5/repos/${GITEE_REPO}/releases?access_token=${GITEE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"tag_name\":\"${TAG}\",\"name\":\"SerialPlot 中文汉化版 ${TAG}\",\"body\":\"自动同步自 GitHub Actions 构建 ${TAG}\",\"prerelease\":false}")
+          echo "$RESP" | head -c 300; echo
+          REL_ID=$(echo "$RESP" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('id',''))" 2>/dev/null || true)
+          if [ -z "$REL_ID" ]; then echo "创建 Gitee Release 失败，跳过同步（请检查 GITEE_TOKEN 权限与 GITEE_REPO 格式 用户名/仓库名）"; exit 0; fi
+          echo "Release id=$REL_ID，上传附件 ..."
+          curl -s -X POST \
+            "https://gitee.com/api/v5/repos/${GITEE_REPO}/releases/${REL_ID}/attach_files?access_token=${GITEE_TOKEN}" \
+            -F "file=@${ZIP}"
+          echo
+          echo "已同步到 Gitee: https://gitee.com/${GITEE_REPO}/releases"

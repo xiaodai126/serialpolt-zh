@@ -75,14 +75,24 @@
 3. 用 NSIS 编译脚本：`makensis.exe tools/serialplot.nsi`
 4. 产物 `serialplot-zh_CN-setup.exe` 即标准 Windows 安装程序（含卸载）。
 
-### 方式 C：GitHub Actions 一键出包（本机完全不用装 Qt）
+### 方式 C：GitHub Actions 一键出包（本机完全不用装 Qt，推荐）
 
 把本仓库推到你自己的 GitHub 仓库，在 **Actions → "Build Windows (中文汉化版)" → Run workflow**，
-运行结束后从 **Artifacts** 下载 `serialplot-zh_CN-portable.zip` 即可。工作流在云端用 Qt6 MinGW 编译并打包，
-对你本机零要求（工作流文件见 `.github/workflows/build-windows.yml`）。
+工作流在云端用 Qt6 MinGW 编译并打包，对你本机零要求。构建完成后提供两种下载入口：
 
-> 注：本汉化版的维护者曾在隔离环境尝试直接预编译，但該环境网络无法拉取 Qt 的大型二进制包，
-> 故提供上述 A/B/C 三种可在你侧落地的方案。
+1. **GitHub Release（默认就有）**：每次构建自动发布到仓库的 `Releases` 页面，下载
+   `serialplot-zh_CN-portable.zip` 即可（解压即用）。这是首选下载方式。
+2. **Gitee 下载站（可选，国内更快）**：若希望国内下载更快，可让工作流把同一个包
+   **自动同步到你的 Gitee 仓库 Release**。只需在 GitHub 仓库做一次配置：
+   - 在 Gitee 生成私人令牌：Gitee → 设置 → 私人令牌 → 勾选 `projects`（仓库读写权限）→ 复制令牌（仅显示一次，妥善保存）。
+   - 在 GitHub 仓库 → Settings → Secrets and variables → Actions → 新增两个 repository secret：
+     - `GITEE_TOKEN`：值填上面的 Gitee 私人令牌
+     - `GITEE_REPO`：值填 `你的Gitee用户名/你的Gitee仓库名`（形如 `laoda/serialplot-zh`）
+   - 配置后，每次构建会自动多跑一个 `sync-to-gitee` 任务，把 zip 传到 Gitee Release；
+     **未配置这两个 secret 时会自动跳过**，不影响 GitHub 侧的构建与下载。
+
+> 说明：本汉化版的维护者曾在隔离环境尝试直接预编译，但该环境网络无法拉取 Qt 的大型二进制包，
+> 故提供上述 A/B/C 三种可在你侧落地的方案。方式 C 的构建机在 GitHub 云端，网络稳定，最省心。
 
 ## 四、语言切换说明
 
