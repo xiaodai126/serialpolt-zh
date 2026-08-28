@@ -1,6 +1,9 @@
 # SerialPlot
 
-**Other languages:** [简体中文](README.zh-CN.md)
+<p align="center">
+  <span style="padding:6px 14px;border:1px solid #d0d7de;border-radius:6px;background:#0969da;color:#ffffff;font-weight:bold;margin-right:8px;">🇬🇧 English</span>
+  <a href="README.zh-CN.md" style="padding: 6px 14px;border:1px solid #d0d7de;border-radius:6px;color:#0969da;font-weight:bold;text-decoration:none;">🇨🇳 简体中文</a>
+</p>
 
 
 Small and simple software for plotting data from serial port in realtime.

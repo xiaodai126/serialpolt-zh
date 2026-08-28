@@ -1,4 +1,7 @@
-**其他语言:** [English](README.md)
+<p align="center">
+  <a href="README.md" style="padding:6px 14px;border:1px solid #d0d7de;border-radius:6px;color:#0969da;font-weight:bold;text-decoration:none;margin-right:8px;">🇬🇧 English</a>
+  <span style="padding:6px 14px;border:1px solid #d0d7de;border-radius:6px;background:#0969da;color:#ffffff;font-weight:bold;">🇨🇳 简体中文</span>
+</p>
 
 # SerialPlot 中文汉化版说明
 
