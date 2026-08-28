@@ -86,12 +86,14 @@ jobs:
           done
           if [ "$OK" != "1" ]; then echo "qtsvg 源码下载失败"; exit 1; fi
           rm -rf qtsvg-src && mkdir qtsvg-src
-          tar xf qtsvg.tar.xz -C qtsvg-src --strip-components=1
+          # Git Bash 自带 tar 在 Windows 上默认不支持 xz 解压，改用 Python（自带 lzma）
+          python -c "import tarfile; tarfile.open('qtsvg.tar.xz','r:xz').extractall('qtsvg-src')"
           QPRO=$(find qtsvg-src -name qtsvg.pro | head -1)
           if [ -z "$QPRO" ]; then echo "未找到 qtsvg.pro"; exit 1; fi
           echo "找到 qtsvg.pro: $QPRO"
           cd "$(dirname "$QPRO")"
-          qmake6 qtsvg.pro
+          QMAKE_BIN=$(command -v qmake6 || command -v qmake)
+          "$QMAKE_BIN" qtsvg.pro
           mingw32-make -j"$(nproc 2>/dev/null || echo 4)"
           mingw32-make install
           echo "校验 Qt6Svg 是否安装成功 ..."
