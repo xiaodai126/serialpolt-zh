@@ -1,0 +1,97 @@
+# =============================================================================
+# SerialPlot 中文汉化版 —— GitHub Actions 一键构建 (Windows 可执行文件)
+#
+# 作用：无需在本机安装 Qt，把本仓库推到 GitHub 后，在 Actions 页面点
+#       "Run workflow" 即可自动编译并产出 serialplot-zh_CN-portable（含 exe +
+#       Qt 运行库 + 中文翻译），从 Artifacts 下载即为解压即用的绿色版。
+#
+# 关键约束（已在本工作流内处理）：
+#   * 项目把 Qwt 静态库名写死为 libqwt.a —— 必须用 MinGW，不能用 MSVC。
+#   * Qt6 的 MinGW 预编译包【不含 qtsvg 模块】，而 serialplot 用到了
+#     QSvgGenerator（SVG 导出），因此本工作流会从源码编译并安装 QtSvg。
+#   * Qwt 在编译时由 CMake 自动从 SourceForge 下载并编译（需联网）。
+#   * 汉化翻译 serialplot_zh_CN.qm 与 Qt 自带中文 qtbase_zh_CN.qm 已随仓库提交。
+#
+# 使用步骤：
+#   1. 把本仓库推到你自己的 GitHub 仓库（main 或 master 分支）
+#   2. 进入仓库的 Actions -> "Build Windows (中文汉化版)" -> Run workflow
+#   3. 运行结束后，在 "Artifacts" 处下载 serialplot-zh_CN-portable
+# =============================================================================
+name: Build Windows (中文汉化版)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python (aqtinstall 需要)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装 aqtinstall
+        run: python -m pip install --upgrade aqtinstall
+
+      - name: 安装 Qt6 (MinGW) + 编译器 + CMake
+        # Qt6 的 MinGW 预编译包不含 qtsvg，qtsvg 在后续步骤从源码编译
+        run: |
+          aqt install-qt windows desktop 6.8.0 win64_mingw -m qtserialport -O C:/Qt
+          aqt install-tool windows desktop tools_mingw1310 -O C:/Qt
+          aqt install-tool windows desktop tools_cmake -O C:/Qt
+
+      - name: 从源码编译并安装 QtSvg (MinGW 预编译包不含此模块)
+        shell: bash
+        run: |
+          set -e
+          export PATH="/c/Qt/6.8.0/mingw_64/bin:/c/Qt/Tools/mingw1310_64/bin:$PATH"
+          URLS=(
+            "https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz"
+            "https://mirrors.tuna.tsinghua.edu.cn/qt/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz"
+          )
+          OK=0
+          for u in "${URLS[@]}"; do
+            echo "尝试下载 qtsvg 源码: $u"
+            if curl -L --retry 3 --retry-all-errors -o qtsvg.tar.xz "$u"; then OK=1; break; fi
+          done
+          if [ "$OK" != "1" ]; then echo "qtsvg 源码下载失败"; exit 1; fi
+          tar xf qtsvg.tar.xz
+          cd qtsvg-everywhere-src-6.8.0
+          qmake6 qtsvg.pro
+          mingw32-make -j"$(nproc 2>/dev/null || echo 4)"
+          mingw32-make install
+          echo "校验 Qt6Svg 是否安装成功 ..."
+          test -f /c/Qt/6.8.0/mingw_64/lib/cmake/Qt6Svg/Qt6SvgConfig.cmake && echo "Qt6Svg OK" || { echo "Qt6Svg 未安装"; exit 1; }
+
+      - name: 配置并编译 serialplot (MinGW, 自动下载编译 Qwt)
+        shell: bash
+        run: |
+          set -e
+          export PATH="/c/Qt/6.8.0/mingw_64/bin:/c/Qt/Tools/mingw1310_64/bin:/c/Qt/Tools/CMake_64/bin:$PATH"
+          cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_QWT=ON
+          cmake --build build --config Release -j"$(nproc 2>/dev/null || echo 4)"
+
+      - name: 部署并打包 (windeployqt + 翻译)
+        shell: bash
+        run: |
+          set -e
+          export PATH="/c/Qt/6.8.0/mingw_64/bin:$PATH"
+          mkdir -p dist/translations
+          windeployqt build/serialplot.exe --dir dist --release
+          cp translations/serialplot_zh_CN.qm dist/translations/
+          cp translations/qtbase_zh_CN.qm dist/translations/
+          cp build/serialplot.exe dist/
+          echo "打包内容：" && ls -R dist | head -40
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialplot-zh_CN-portable
+          path: dist

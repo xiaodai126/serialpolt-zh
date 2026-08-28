@@ -1,0 +1,346 @@
+BPSLabel	0bps
+BPSLabel	bits per second
+BPSLabel	!%1/%2bps
+BPSLabel	Maximum baud rate may be reached!
+BPSLabel	%1bps
+ChannelInfoModel	Channel %1
+ChannelInfoModel	Channel
+ChannelInfoModel	Visible
+ChannelInfoModel	Gain
+ChannelInfoModel	Offset
+CommandPanel	&Commands
+CommandPanel	&New Command
+CommandPanel	Command 
+DataRecorder	timestamp
+FramedReader	Sync word is invalid!
+FramedReader	Frame size must be multiple of %1 (#channels * sample size)!
+FramedReader	All is well!
+HidableTabWidget	Hide Panels
+MainWindow	Port
+MainWindow	Data Format
+MainWindow	Plot
+MainWindow	Commands
+MainWindow	Record
+MainWindow	Text View
+MainWindow	Toolbars
+MainWindow	0sps
+MainWindow	samples per second (per channel)
+MainWindow	Closing SerialPlot
+MainWindow	There are un-saved snapshots. If you close you will loose the data.
+MainWindow	Serialplot cannot save settings due to unknown error: %1
+MainWindow	Failed to save settings!
+MainWindow	sps
+MainWindow	Export CSV File
+MainWindow	Export SVG File(s)
+MainWindow	Save Settings
+MainWindow	Load Settings
+MainWindow	Language
+MainWindow	The language setting will take effect after restart.
+MainWindow	Small and simple software for plotting data from serial port in realtime.
+MainWindow	Load configuration from file.
+MainWindow	Set port name.
+MainWindow	Set port baud rate.
+MainWindow	Open serial port.
+Plot	 DEMO RUNNING 
+Plot	 No Visible Channels 
+PlotControlPanel	Reset
+PlotControlPanel	Reset Names
+PlotControlPanel	Reset Colors
+PlotControlPanel	Show All
+PlotControlPanel	Hide All
+PlotControlPanel	Reset All Gain
+PlotControlPanel	Reset All Offset
+PlotControlPanel	Reset Menu
+PlotControlPanel	Signed %1 bits %2 to +%3
+PlotControlPanel	Unsigned %1 bits %2 to +%3
+PlotControlPanel	-1 to +1
+PlotControlPanel	0 to +1
+PlotControlPanel	-100 to +100
+PlotControlPanel	0 to +100
+PlotControlPanel	Reset channel names and colors
+PlotControlPanel	Show all channels
+PlotControlPanel	Hide all channels
+PlotControlPanel	Confirm Number of Samples
+PlotControlPanel	Don't show this again.
+PlotMenu	&View
+PlotMenu	&Grid
+PlotMenu	&Minor Grid
+PlotMenu	&Unzoom
+PlotMenu	&Dark Background
+PlotMenu	&Legend
+PlotMenu	Multi &Plot
+PlotMenu	&Symbols
+PlotMenu	Show When &Zoomed
+PlotMenu	Always &Show
+PlotMenu	Always &Hide
+PlotMenu	Legend Position
+PlotMenu	Top Left
+PlotMenu	Top Right
+PlotMenu	Bottom Right
+PlotMenu	Bottom Left
+PlotMenu	Show Grid
+PlotMenu	Show Minor Grid
+PlotMenu	Unzoom the Plot
+PlotMenu	Enable Dark Plot Background
+PlotMenu	Display the Legend on Plot
+PlotMenu	Display All Channels Separately
+PlotMenu	Show/Hide symbols
+PortControl	Port Toolbar
+PortControl	Open
+PortControl	Open Port
+PortControl	Reload port list
+PortControl	No port found - enter name
+PortControl	Select port or enter name
+RecordPanel	Record Toolbar
+RecordPanel	Record
+RecordPanel	seconds only
+RecordPanel	seconds with precision
+RecordPanel	milliseconds
+RecordPanel	Select recording file
+RecordPanel	Error
+RecordPanel	Column separator cannot be empty! Please select a separator.
+RecordPanel	File Already Exists
+RecordPanel	File (%1) already exists. How to continue?
+RecordPanel	Overwrite
+RecordPanel	Select Another File
+Snapshot	&Delete
+Snapshot	Delete 
+SnapshotManager	&Snapshots
+SnapshotManager	&Take Snapshot
+SnapshotManager	&Load Snapshots
+SnapshotManager	&Clear Snapshots
+SnapshotManager	Take a snapshot of current plot
+SnapshotManager	Load snapshots from CSV files
+SnapshotManager	Delete all snapshots
+SnapshotManager	Load CSV File
+SnapshotView	Rename Snapshot
+SnapshotView	Enter new name:
+SnapshotView	Export CSV File
+SnapshotView	Export SVG File(s)
+SneakyLineEdit	Click to edit
+UpdateCheckDialog	Update check failed.\n
+UpdateCheckDialog	There is no update yet.
+UpdateCheckDialog	Found update to version %1. Click to <a href=\"%2\">download</a>.
+UpdateCheckDialog	Checking update...
+UpdateChecker	Network error: 
+UpdateChecker	JSon parsing error at %1: 
+UpdateChecker	JSON parsing error.
+AboutDialog	About
+AboutDialog	<html><head/><body><p align="center"><span style=" font-size:14pt;">SerialPlot</span></p><p align="center">$VERSION_STRING$</p><p align="center">Developed by Hasan Yavuz Özderya</p><p align="center">Using Qt (<a href="https://www.qt.io/"><span style=" text-decoration: underline; color:#0000ff;">https://www.qt.io/</span></a>) and Qwt (<a href="http://qwt.sf.net"><span style=" text-decoration: underline; color:#0000ff;">http://qwt.sf.net</span></a>)</p><p align="center"><br/></p><p align="center">This software is GPL licensed. You can obtain source code from <a href="https://hg.sr.ht/~hyozd/serialplot/"><span style=" text-decoration: underline; color:#0000ff;">https://hg.sr.ht/~hyozd/serialplot/</span></a>.</p><p align="center"><br/></p><p align="right"><span style=" font-size:8pt;">RevID: $VERSION_REVISION$<br/></span></p></body></html>
+AboutDialog	About Qt
+AsciiReaderSettings	Form
+AsciiReaderSettings	Number Of Channels:
+AsciiReaderSettings	Select number of channels or set to 0 for Auto (determined from incoming data)
+AsciiReaderSettings	Auto
+AsciiReaderSettings	Column Delimiter:
+AsciiReaderSettings	comma
+AsciiReaderSettings	space
+AsciiReaderSettings	tab
+AsciiReaderSettings	other:
+AsciiReaderSettings	Enter a custom delimiter character
+AsciiReaderSettings	|
+AsciiReaderSettings	Filter by Prefix:
+AsciiReaderSettings	Disabled
+AsciiReaderSettings	Only read lines that start with prefix
+AsciiReaderSettings	Include
+AsciiReaderSettings	Do not read lines that start with prefix
+AsciiReaderSettings	Exclude
+AsciiReaderSettings	Prefix text used to filter incoming data
+AsciiReaderSettings	prefix text
+AsciiReaderSettings	Value format:
+AsciiReaderSettings	Expect HEX data instead of decimal.
+AsciiReaderSettings	Hex data
+BinaryStreamReaderSettings	Form
+BinaryStreamReaderSettings	Number Of Channels:
+BinaryStreamReaderSettings	Select number of channels
+BinaryStreamReaderSettings	Skip 1 byte while reading to correct the alignment
+BinaryStreamReaderSettings	Skip Byte
+BinaryStreamReaderSettings	Skip reading 1 sample while reading to shift channel order
+BinaryStreamReaderSettings	Skip Sample
+BinaryStreamReaderSettings	Number Type:
+BinaryStreamReaderSettings	Endianness:
+CommandPanel	Form
+CommandPanel	New Command
+CommandWidget	Form
+CommandWidget	<html><head/><body><p>Enter your command here.</p><p>In ASCII mode you can use backslash '\' to send some special characters. These are:<br/><span style=" font-weight:600;">\n</span> : Line Feed (new line)<br/><span style=" font-weight:600;">\r</span> : Carriage Return<br/><span style=" font-weight:600;">\t</span> : Tab<br/><span style=" font-weight:600;">\\</span> : Backslash</p></body></html>
+CommandWidget	ASCII
+CommandWidget	HEX
+CommandWidget	Send
+DataFormatPanel	Data Format
+DataFormatPanel	Data is sent as consecutive samples in binary form. Syncing can be a problem.
+DataFormatPanel	Simple Binary
+DataFormatPanel	Data is sent in the form of ASCII text as comma seperated values. Easy to implement.
+DataFormatPanel	ASCII
+DataFormatPanel	Define a custom binary frame. Powerful.
+DataFormatPanel	Custom Frame
+DataTextView	Form
+DataTextView	Enable display of plotted data as text.
+DataTextView	Enable
+DataTextView	Num. Lines:
+DataTextView	Decimals:
+DataTextView	Clear
+DemoReaderSettings	Form
+DemoReaderSettings	Number Of Channels:
+DemoReaderSettings	Select number of channels or set to 0 for Auto (determined from incoming data)
+DemoReaderSettings	Demo is enabled, exit demo for reader settings.
+EndiannessBox	EndiannessBox
+EndiannessBox	least significant byte first
+EndiannessBox	Little Endian
+EndiannessBox	most significant byte first
+EndiannessBox	Big Endian
+FramedReaderSettings	Form
+FramedReaderSettings	Enter the 'Frame Start' bytes in hexadecimal.
+FramedReaderSettings	Number of Channels
+FramedReaderSettings	# Channels:
+FramedReaderSettings	Select number of channels
+FramedReaderSettings	Payload Size:
+FramedReaderSettings	Frame size is always the same
+FramedReaderSettings	Fixed Size:
+FramedReaderSettings	<html><head/><body><p>Enter the frame size. It <span style=" font-weight:600;">must</span> be the multiple of (#channels * sample size).</p></body></html>
+FramedReaderSettings	First byte after the 'frame start' bytes should be the size of the frame payload. Only counting following bytes but excluding the checksum.
+FramedReaderSettings	1 byte size field
+FramedReaderSettings	First 2 bytes after the 'frame start' bytes should be the size of the frame payload. Only counting following bytes but excluding the checksum.
+FramedReaderSettings	2 byte size field
+FramedReaderSettings	Number Type:
+FramedReaderSettings	Byte Order
+FramedReaderSettings	Endianness:
+FramedReaderSettings	Checksum:
+FramedReaderSettings	Last byte of the frame is checksum.
+FramedReaderSettings	Enabled
+FramedReaderSettings	Frame Start:
+FramedReaderSettings	All is well.
+FramedReaderSettings	Enable printing of extra log messages that can be useful for debugging
+FramedReaderSettings	Debug Mode
+MainWindow	SerialPlot
+MainWindow	Log
+MainWindow	Error and Warning Messages
+MainWindow	&Help
+MainWindow	&File
+MainWindow	Secondary
+MainWindow	Plot Toolbar
+MainWindow	Pause
+MainWindow	Pause Plotting
+MainWindow	P
+MainWindow	Clear
+MainWindow	Ctrl+K
+MainWindow	&About
+MainWindow	&Demo Mode
+MainWindow	Toggle Demo Mode
+MainWindow	&Export CSV
+MainWindow	Export plot data to CSV
+MainWindow	&Quit
+MainWindow	Ctrl+Q
+MainWindow	&Report a Bug
+MainWindow	Report a Bug on SerialPlot Website
+MainWindow	&Save Settings
+MainWindow	Save Settings to a File
+MainWindow	&Load Settings
+MainWindow	Load Settings from a File
+MainWindow	&Check Update
+MainWindow	Bar Plot
+MainWindow	Vertical
+MainWindow	Horizontal
+MainWindow	E&xport SVG
+NumberFormatBox	NumberFormat
+NumberFormatBox	unsigned 1 byte integer
+NumberFormatBox	uint8
+NumberFormatBox	unsigned 2 bytes integer
+NumberFormatBox	uint16
+NumberFormatBox	unsigned 4 bytes integer
+NumberFormatBox	uint32
+NumberFormatBox	signed 1 byte integer
+NumberFormatBox	int8
+NumberFormatBox	signed 2 bytes integer
+NumberFormatBox	int16
+NumberFormatBox	signed 4 bytes integer
+NumberFormatBox	int32
+NumberFormatBox	4 bytes floating point number
+NumberFormatBox	float
+NumberFormatBox	8 bytes double precision floating point number
+NumberFormatBox	double
+PlotControlPanel	Form
+PlotControlPanel	Line Thickness
+PlotControlPanel	Buffer Size:
+PlotControlPanel	Length of acquisition as number of samples
+PlotControlPanel	Index as X AXis
+PlotControlPanel	Xmin
+PlotControlPanel	lower limit of Y axis
+PlotControlPanel	Xmax
+PlotControlPanel	upper limit of Y axis
+PlotControlPanel	Auto Scale Y Axis
+PlotControlPanel	Ymin
+PlotControlPanel	Ymax
+PlotControlPanel	Select Range Preset:
+PlotControlPanel	Plot Width:
+PlotControlPanel	Width of X axis as maximum number of samples that are shown in plot
+PortControl	Form
+PortControl	Port:
+PortControl	You can enter a port name even if it's not listed, such as pseudo terminals.
+PortControl	You can enter a custom baud rate if it's supported by your OS/adapter.
+PortControl	Baud Rate:
+PortControl	Reload the list of ports
+PortControl	↺
+PortControl	No Parity
+PortControl	Odd Parity
+PortControl	Even Parity
+PortControl	8 bits
+PortControl	7 bits
+PortControl	6 bits
+PortControl	5 bits
+PortControl	1 Stop Bit
+PortControl	2 Stop Bit
+PortControl	No Flow Control
+PortControl	Hardware Control
+PortControl	Software Control
+PortControl	Toggle port status
+PortControl	Request To Send
+PortControl	Data Terminal Ready
+PortControl	DTR
+PortControl	Data Set Ready
+PortControl	DSR
+PortControl	RTS
+PortControl	Data Carrier Detect
+PortControl	DCD
+PortControl	Ring Indicator
+PortControl	RI
+PortControl	Clear To Send
+PortControl	CTS
+RecordPanel	Form
+RecordPanel	You can use C `strftime` function format specifiers for timestamps in your file name.
+RecordPanel	Enter file name or browse
+RecordPanel	Select record file
+RecordPanel	Browse
+RecordPanel	Stop recording when port closed
+RecordPanel	Increments file name automatically everytime a new recording starts
+RecordPanel	Auto increment file name
+RecordPanel	Do not buffer when writing to file. Check this if you are using other software to open the file during recording.
+RecordPanel	Disable buffering
+RecordPanel	Use CR+LF as line endings. Some windows software may not show lines correctly otherwise. Can't be changed during recording.
+RecordPanel	Windows Style Line Endings
+RecordPanel	Channel names are written to the first line of record file
+RecordPanel	Write header line
+RecordPanel	Continue recording to file even when plotting is paused
+RecordPanel	Record while paused
+RecordPanel	Insert timestamp (milliseconds from epoch) as first column
+RecordPanel	Insert timestamp
+RecordPanel	Column Separator:
+RecordPanel	For TAB character enter \t
+RecordPanel	,
+RecordPanel	Decimals:
+RecordPanel	Number of digits after comma
+RecordPanel	Timestamp In:
+RecordPanel	Start/Stop Recording
+SnapshotView	MainWindow
+SnapshotView	&Snapshot
+SnapshotView	&Save as CSV
+SnapshotView	Save snapshot as CSV file
+SnapshotView	&Rename
+SnapshotView	Rename this snapshot
+SnapshotView	&Close
+SnapshotView	Close Window
+SnapshotView	Ctrl+W
+SnapshotView	E&xport SVG
+SnapshotView	Export snapshot as SVG
+UpdateCheckDialog	Check Update
+UpdateCheckDialog	Updates will be checked only once a day at first start of the application
+UpdateCheckDialog	Check updates periodically

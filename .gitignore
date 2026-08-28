@@ -1,0 +1,17 @@
+# 构建产物
+build/
+dist/
+*.o
+*.obj
+*.user
+*.qm.user
+
+# 编译缓存
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# 操作系统/IDE
+Thumbs.db
+.DS_Store
