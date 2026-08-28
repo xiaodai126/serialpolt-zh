@@ -1,5 +1,8 @@
 # SerialPlot
 
+**Other languages:** [简体中文](README.zh-CN.md)
+
+
 Small and simple software for plotting data from serial port in realtime.
 
 ![SerialPlot Screenshot](./misc/screenshot.png)
