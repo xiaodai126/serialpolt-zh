@@ -61,7 +61,7 @@ jobs:
         shell: bash
         run: |
           set -e
-          export PATH="/c/Qt/6.8.0/mingw_64/bin:/c/Qt/Tools/mingw1310_64/bin:$PATH"
+          export PATH="/c/Qt/6.8.0/mingw_64/bin:/c/Qt/Tools/mingw1310_64/bin:/c/Qt/Tools/CMake_64/bin:$PATH"
           URLS=(
             "https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz"
             "https://mirrors.tuna.tsinghua.edu.cn/qt/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz"
@@ -88,14 +88,22 @@ jobs:
           rm -rf qtsvg-src && mkdir qtsvg-src
           # Git Bash 自带 tar 在 Windows 上默认不支持 xz 解压，改用 Python（自带 lzma）
           python -c "import tarfile; tarfile.open('qtsvg.tar.xz','r:xz').extractall('qtsvg-src')"
-          QPRO=$(find qtsvg-src -name qtsvg.pro | head -1)
-          if [ -z "$QPRO" ]; then echo "未找到 qtsvg.pro"; exit 1; fi
-          echo "找到 qtsvg.pro: $QPRO"
-          cd "$(dirname "$QPRO")"
-          QMAKE_BIN=$(command -v qmake6 || command -v qmake)
-          "$QMAKE_BIN" qtsvg.pro
-          mingw32-make -j"$(nproc 2>/dev/null || echo 4)"
-          mingw32-make install
+          # Qt6 子模块没有顶层 qtsvg.pro（Qt6 模块改用 CMake 构建），定位解压出的源码根目录
+          SRC=$(find qtsvg-src -maxdepth 1 -mindepth 1 -type d | head -1)
+          if [ -z "$SRC" ]; then echo "未找到 qtsvg 源码目录"; exit 1; fi
+          echo "qtsvg 源码目录: $SRC"
+          cd "$SRC"
+          # 用 CMake 以 Qt 的 BuildInternals 机制构建独立 add-on 模块（需 perl，已通过保留 $PATH 提供）
+          cmake -G "MinGW Makefiles" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="/c/Qt/6.8.0/mingw_64" \
+            -DCMAKE_INSTALL_PREFIX="/c/Qt/6.8.0/mingw_64" \
+            -DQT_BUILD_EXAMPLES=OFF \
+            -DQT_BUILD_TESTS=OFF \
+            -DQT_BUILD_STANDALONE_TESTS=OFF \
+            .
+          cmake --build . -j"$(nproc 2>/dev/null || echo 4)"
+          cmake --install .
           echo "校验 Qt6Svg 是否安装成功 ..."
           test -f /c/Qt/6.8.0/mingw_64/lib/cmake/Qt6Svg/Qt6SvgConfig.cmake && echo "Qt6Svg OK" || { echo "Qt6Svg 未安装"; exit 1; }
 
