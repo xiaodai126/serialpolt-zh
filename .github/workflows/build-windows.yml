@@ -125,18 +125,20 @@ jobs:
           prerelease: false
 
   sync-to-gitee:
-    # 仅当配置了 Gitee 令牌与仓库时才运行；否则自动跳过，不影响主构建
+    # 可选步骤：仅在配置了 GITEE_TOKEN 与 GITEE_REPO(secrets) 时，下载/上传步骤才执行；未配置自动跳过，不影响主构建。
+    # 注意：secrets 不能在 job 级 if 中使用，故判断放在 step 级。
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.GITEE_TOKEN != '' && secrets.GITEE_REPO != '' }}
     steps:
       - name: 下载构建产物
+        if: ${{ secrets.GITEE_TOKEN != '' && secrets.GITEE_REPO != '' }}
         uses: actions/download-artifact@v4
         with:
           name: serialplot-zh_CN-portable
           path: ./pkg
 
       - name: 上传到 Gitee Release
+        if: ${{ secrets.GITEE_TOKEN != '' && secrets.GITEE_REPO != '' }}
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITEE_REPO: ${{ secrets.GITEE_REPO }}
